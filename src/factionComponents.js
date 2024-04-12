@@ -10,6 +10,7 @@ function FactionButtons() {
     const [factions, setFactions] = useState([]);
     const [killteams, setKillteams] = useState([]);
     const [selectedKillteam, setSelectedKillteam] = useState(null);
+    const [selectedOperative, setSelectedOperative] = useState(null);
     const [currentFaction, setCurrentFaction] = useState(null);
     const [activeStep, setActiveStep] = useState(0);
 
@@ -45,6 +46,11 @@ function FactionButtons() {
 
     function handleKillteamClick(killteam) {
         fetchKillteamDetails(currentFaction.factionid, killteam.killteamid);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+
+    function handleOperativeClick(operative) {
+        setSelectedOperative(operative);
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
 
@@ -91,9 +97,27 @@ function FactionButtons() {
                         <h2>{selectedKillteam?.killteamname}</h2>
                         <p>{selectedKillteam?.description}</p>
                         {selectedKillteam?.fireteams[0].operatives.map(operative => (
-                            <Button variant="contained" color="primary" key={operative.operativeid}>
+                            <Button variant="contained" color="primary" key={operative.operativeid}
+                                onClick={() => handleOperativeClick(operative)}>
                                 {operative.opname}
                             </Button>))}
+                        <Button variant="contained" color="secondary" onClick={handleBack}>Back</Button>
+                    </StepContent>
+                </Step>
+                <Step key="Operative Details">
+                    <StepLabel>Operative Details</StepLabel>
+                    <StepContent>
+                        <h2>{selectedOperative?.opname}</h2>
+                        <div>
+                            <p>{`M: ${selectedOperative?.M}`}</p>
+                            <p>{`APL: ${selectedOperative?.APL}`}</p>
+                            <p>{`GA: ${selectedOperative?.GA}`}</p>
+                        </div>
+                        <div>
+                            <p>{`DF: ${selectedOperative?.DF}`}</p>
+                            <p>{`SV: ${selectedOperative?.SV}`}</p>
+                            <p>{`W: ${selectedOperative?.W}`}</p>
+                        </div>
                         <Button variant="contained" color="secondary" onClick={handleBack}>Back</Button>
                     </StepContent>
                 </Step>
